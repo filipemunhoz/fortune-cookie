@@ -23,6 +23,6 @@ public class FortuneController {
 		response.setMessage(service.getMessage());
 		response.setNumbers(service.getNumbers());
 		
-		return new ResponseEntity<>(response, HttpStatus.OK);		
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

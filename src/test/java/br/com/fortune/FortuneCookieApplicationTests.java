@@ -8,6 +8,7 @@ class FortuneCookieApplicationTests {
 
 	@Test
 	void contextLoads() {
+		FortuneCookieApplication.main(new String[]{});
 	}
 
 }

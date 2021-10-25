@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.fortune.repository.FortuneRepository;
+import br.com.fortune.response.FortuneResponse;
 import br.com.fortune.service.FortuneService;
 
 @ExtendWith(SpringExtension.class)
@@ -31,30 +34,28 @@ public class FortuneControllerTest {
 	private FortuneService service;
 	
 	@Autowired
-	private FortuneRepository repository;
+	private FortuneController controller;
 	
 	@Test
-	void getFortuneResponse() throws Exception {
+	@RepeatedTest(50)
+	void getFortuneResponse()  throws Exception {
+	    
+		mockMvc.perform(get("/"))
+        	.andExpect(status().isOk());
 		
-	    mockMvc.perform(get("/"))
-	            .andExpect(status().isOk());
-	    
-	    List<String> messages = repository.getMessages();
-	    String message = service.getMessage();
-	    
-	    assertThat(messages.size()).isGreaterThan(0);
+		ResponseEntity<FortuneResponse> response = controller.getFortune();
+		
+		String message = response.getBody().getMessage();
+		List<Integer> numbers = response.getBody().getNumbers();
+		
 	    assertThat(message).isNotNull();
+	    assertThat(message).isNotEmpty();
 	    assertThat(message.length()).isGreaterThan(0);
-	}
-	
-	@Test
-	@RepeatedTest(10)
-	void getNumbers() {
-		
-		List<Integer> numbers = service.getNumbers();
-
+	    
 	    assertThat(numbers).isNotNull();
 	    assertThat(numbers.size()).isEqualTo(6);
 	    assertThat(numbers.size()).isEqualTo(numbers.stream().distinct().collect(Collectors.toList()).size());
+	    assertThat(Collections.min(numbers)).isGreaterThan(0);
+	    assertThat(Collections.max(numbers)).isLessThan(61);	    
 	}
 }
