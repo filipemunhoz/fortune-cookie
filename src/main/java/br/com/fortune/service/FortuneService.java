@@ -33,6 +33,7 @@ public class FortuneService {
 				.distinct()
 				.limit(6)
 				.boxed()
+				.sorted()
 				.collect(Collectors.toList());
 	}
 }

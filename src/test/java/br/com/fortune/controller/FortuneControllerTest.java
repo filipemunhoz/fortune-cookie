@@ -18,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.fortune.repository.FortuneRepository;
 import br.com.fortune.response.FortuneResponse;
-import br.com.fortune.service.FortuneService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -30,9 +28,6 @@ public class FortuneControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@Autowired
-	private FortuneService service;
-	
 	@Autowired
 	private FortuneController controller;
 	
